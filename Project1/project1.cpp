@@ -1,26 +1,25 @@
 #include <iostream>
 using namespace std;
 
-// Programmer: Wengxi Li, January 2022.
-// This source file is used to appoximate the area between a curve and the X-axis by
-// fitting the many rectangles between the curve and axis, whose midpoints are on the 
-// curve. Users could choose any interval, range and tolerance they want.
+/* Programmer: Wengxi Li. Date: January 2022.
+Purpose: This file is used to appoximate the area between a curve and the X-axis 
+by fitting many rectangles between the curve and axis, whose midpoints are on 
+the curve. Users could choose any interval, range and tolerance they want. */
 
-void printMenu(); // prints out the possible choices the user has, in a menu format
+// prints out the possible choices the user has, in a menu format
+void printMenu(); 
 
 // raises "val" to the power "power" and returns the result.
 double toThePower(const double val, const int power); 
 
-// evaluates the cubic formula specified as: y = aCoeff * xValue^3 + 
-// bCoeff * xValue^2 + cCoeff * xValue + dCoeff. return false if the 
-// resulting y value is a negative value, or true if the resulting 
-// value is greater or equal to zero
+/* evaluates the cubic formula's result's sign. return false if the resulting y value
+ is a negative value, or true if the resulting value is greater or equal to zero */
 bool evaluateCubicFormula(const double aCoeff, const double bCoeff, 
 const double cCoeff, const double dCoeff, const double xValue, double 
 &resultVal);
 
-// approximate the area between the X-axis and the curve defined by the 
-// formula using rectangles with height at the midpoint
+/* approximate the area between the X-axis and the curve defined by the 
+ formula using rectangles with height at the midpoint */
 double approximateAreaWithRectangles(const double aCoeff, const double 
 bCoeff, const double cCoeff, const double dCoeff, const double startX, 
 const double endX, const int numRects);
@@ -34,9 +33,9 @@ int main()
     
     int userChoice;
     cout << "YOUR CHOICE: ";
-    cin >> userChoice;
+    cin >> userChoice;    
 
-    if (userChoice == 1)
+    while (userChoice != 3)
     {
         double aCoeff, bCoeff, cCoeff, dCoeff;
         cout << "Enter (a b c d) for function y = a*x^3 + b*x^2 + c*x + d: ";
@@ -46,6 +45,8 @@ int main()
         cout << "Now enter x start and end values: ";
         cin >> startX >> endX;
 
+        if (userChoice == 1)
+        {
         int numRects;
         cout << "Enter the number of rectangles to use: ";
         cin >> numRects;
@@ -54,17 +55,9 @@ int main()
              << approximateAreaWithRectangles(aCoeff, bCoeff, cCoeff, dCoeff, startX, endX, numRects)
              << endl;
 
-    }
-    else if (userChoice == 2)
-    {
-        double aCoeff, bCoeff, cCoeff, dCoeff;
-        cout << "Enter (a b c d) for function y = a*x^3 + b*x^2 + c*x + d: ";
-        cin >> aCoeff >> bCoeff >> cCoeff >> dCoeff;
-
-        double startX, endX;
-        cout << "Now enter x start and end values: ";
-        cin >> startX >> endX;
-
+        }
+        else if (userChoice == 2)
+        {
         double correctAnswer;
         cout << "Enter correct answer: ";
         cin >> correctAnswer;
@@ -75,7 +68,8 @@ int main()
 
         int numRects = 1;
         while (numRects <= 100 && 
-        (correctAnswer - approximateAreaWithRectangles(aCoeff, bCoeff, cCoeff, dCoeff, startX, endX, numRects)) / correctAnswer > precision)
+        (correctAnswer - approximateAreaWithRectangles(aCoeff, bCoeff, cCoeff, dCoeff, 
+        startX, endX, numRects)) > precision)
         {
             numRects++;
         }
@@ -85,13 +79,13 @@ int main()
         else
             cout << "Tried 100 rectangles without reaching precision" << endl;
 
+        }
+        printMenu();
+        cin >> userChoice;  
     }
-    else
-    {
-        cout << "Thanks for using this program";
-        return 0;
-    }    
-        
+    
+    cout << "Thanks for using this program";
+    return 0;           
 }
 #endif 
 
@@ -116,6 +110,7 @@ bool evaluateCubicFormula(const double aCoeff, const double bCoeff,
 const double cCoeff, const double dCoeff, const double xValue, double 
 &resultVal) 
 {
+    resultVal = aCoeff * toThePower(xValue, 3) + bCoeff * toThePower(xValue, 2) + cCoeff * xValue + dCoeff;
     if (resultVal < 0)
         return false;
     else
