@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-/* Programmer: Wengxi Li. Date: January 2022.
+/* Programmer: Wengxi Li. Date: Febrary 2022.
 Purpose: This file is used to appoximate the area between a curve and the  
 X-axis by fitting many rectangles between the curve and axis, whose midpoints 
 are on the curve. Users could choose any interval, range and precision they 
@@ -76,8 +76,13 @@ int main()
 
       int numRects = 1;
       while (numRects <= MAX_NUM_RECTANGLES && 
-        abs(correctAnswer - approximateAreaWithRectangles(aCoeff, bCoeff, 
-        cCoeff, dCoeff, startX, endX, numRects)) > precision) 
+        (correctAnswer - approximateAreaWithRectangles(aCoeff, bCoeff, cCoeff, 
+        dCoeff, startX, endX, numRects) > precision || correctAnswer - 
+        approximateAreaWithRectangles(aCoeff, bCoeff, cCoeff, dCoeff, startX, 
+        endX, numRects) < - precision)) 
+      // correctAnswer - approximateAreaWithRectangles(aCoeff, bCoeff, cCoeff, 
+      // dCoeff, startX, endX, numRects) is the difference between correct
+      // answer and approximate answer. The negative case is also considered. 
       // either numRects is larger than MAX_NUM_RECTANGLES or the difference
       // is smaller than precision will the while loop end
       {
@@ -90,8 +95,8 @@ int main()
       }        
       else
       {
-        cout << "Tried" << MAX_NUM_RECTANGLES 
-             << "rectangles without reaching precision" << endl;
+        cout << "Tried " << MAX_NUM_RECTANGLES 
+             << " rectangles without reaching precision" << endl;
       }        
     }
     
@@ -100,7 +105,7 @@ int main()
     cin >> userChoice;  // until user input 3, the loop will not quit
   }
   
-  cout << "Thanks for using this program";
+  cout << "Thanks for using this program" << endl;
   return 0;           
 }
 #endif 
