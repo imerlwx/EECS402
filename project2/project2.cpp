@@ -5,27 +5,31 @@ using namespace std;
 Purpose: This project will use object-oriented programming to develop three
 simple classes to represent and utilize colors and images */
 
+const int NUM_ROWS = 10;  // number of rows in the image
+const int NUM_COLS = 18;  // number of columns in the image
+
 class ColorClass {
   private:
     
-    int redVal;
-    int greenVal;
-    int blueVal;
-    const int FULL_VAL = 1000;
-    const int ZERO_VAL = 0;
+    int redVal; // the amount of red in a color
+    int greenVal; // the amount of green in a color
+    int blueVal; // the amount of blue in a color
+    const int FULL_VAL = 1000; // the largest amount in a color
+    const int ZERO_VAL = 0; // the smallest amount in a color
     
     // This function will check if the color value is out of range. If true, 
     // clipped it to the maximum or minimum value. Otherwise return false.
-    bool clippVal(int colorVal1, const int colorVal2);
+    bool clippVal(int &colorVal1, const int colorVal2);
 
   public:
     // default ctor sets the color’s initial RGB values to the color full white
     ColorClass();  
     
-    // value ctor sets the color’s initial RGB values to the values provided
-    ColorClass(const int inRed, const int inGreen, const int inBlue):
-    redVal(inRed), greenVal(inGreen), blueVal(inBlue)
-    { ; } 
+    // Value ctor sets the color’s initial RGB values to the values provided.
+    // If a specified color value is outside the valid range, it will be 
+    // “clipped” to ensure all ColorClass attributes are always set to be 
+    // within the valid range. 
+    ColorClass(const int inRed, const int inGreen, const int inBlue); 
 
     // function sets the color’s initial RGB values to the color full black
     void setToBlack(); 
@@ -65,9 +69,108 @@ class ColorClass {
     // format: "R: <red> G: <green> B: <blue>" where <red>, <green>, <blue>
     // are all replaced with their corresponding component color values.
     void printComponentValues()const;
+
+    ~ColorClass();
+};
+
+// This class is to uniquely identify a specific pixel within an image.  
+class RowColumnClass
+{
+  private:
+    int rowVal;
+    int colVal; 
+	  const int INIT_VAL = -99999;
+    
+  public:
+    // This default constructor simply sets both the row and column value 
+	  // of the newly created RowColumnClass object to -99999. 
+	  RowColumnClass();
+	  // This value constructor simply sets the row and column values to the 
+	  // corresponding values passed into the constructor. 
+	  RowColumnClass(const int inRow, const int inCol);
+	
+	  // These functions are simple “setter functions” that just directly set
+	  // the appropriate attribute(s) to the value(s) provided. 
+    void setRowCol(const int inRow, const int inCol); 
+    void setRow(const int inRow);  
+    void setCol(const int inCol);
+    
+	  // These functions are simple “getter functions” that just return the 
+	  // appropriate attribute value to the caller. 
+    int getRow() const;
+	  int getCol() const;
+	
+    // This function adds the row and column index values in the input 
+	  // parameter to the row and column index of the object the function 
+	  // is called on 
+    void addRowColTo(const RowColumnClass &inRowCol);	
+	
+	  // This function prints this object's attribute's in the format 
+	  // "[<row>,<col>]" where <row> and <col> are replaced with the value 
+	  // of the corresponding attribute values.
+	  void printRowCol() const;
+	
+	  ~RowColumnClass();
+};
+
+class ImageClass
+{
+  private:
+    // the attribute is a numRows * numCols 2D matrix
+
+    ColorClass imageAry[NUM_ROWS][NUM_COLS];
+    
+    // If the location specified is a valid location for the image, returns 
+    // true, otherwise returns false.
+    bool checkLoc(const RowColumnClass &inRolCol) const;
+
+  public:
+    
+    // This default constructor sets all pixels in the image to full black
+    ImageClass();
+    // This function assigns all image pixels to the color provided via input
+    // parameter “inColor”
+    void initializeTo(const ColorClass &inColor);
+    
+    // This function performs a pixel-wise addition, such that each pixel in 
+    // the image has the pixel in the corresponding location in the right hand
+    // side input image added to it.
+    bool addImageTo(const ImageClass &rhsImage);
+    // This function causes the image's pixel values to be set to the sum of
+    // the corresponding pixels in each image in the imagesToAdd parameter.
+    bool addImages(const int numImgsToAdd, const ImageClass imagesToAdd []);
+
+    // This function attempts to set the pixel at the location specified by the
+    // “inRowCol” parameter to the color specified via the “inColor” parameter.
+    bool setColorAtLocation(const RowColumnClass &inRowCol, 
+      const ColorClass &inColor);
+    // If the row/column provided is a valid row/column for the image, this 
+    // function returns true and the output reference parameter "outColor" is
+    // assigned to the color of the image pixel at that location. Otherwise 
+    // return false and do not modify anything.
+    bool getColorAtLocation(const RowColumnClass &inRowCol, 
+      ColorClass &outColor) const;
+
+    // This function prints the contents of the image to the screen. Each 
+    // pixel is printed using the format described for the ColorClass above.
+    void printImage() const;
+
+    ~ImageClass();
 };
 
 int main(){}
+
+ColorClass::ColorClass()
+{
+  setToWhite();
+}
+
+ColorClass::ColorClass(const int inRed, const int inGreen, const int inBlue)
+{
+  clippVal(redVal, inRed);
+  clippVal(greenVal, inGreen);
+  clippVal(blueVal, inBlue);
+}
 
 void ColorClass::setToBlack()
 {
@@ -104,7 +207,7 @@ void ColorClass::setToWhite()
   blueVal = FULL_VAL;
 }
 
-bool ColorClass::clippVal(int colorVal1, const int colorVal2)
+bool ColorClass::clippVal(int &colorVal1, const int colorVal2)
 {
   if (colorVal2 > FULL_VAL || colorVal2 < ZERO_VAL)
   {
@@ -130,7 +233,7 @@ bool ColorClass::setTo(const int inRed, const int inGreen, const int inBlue)
   // Only if all the three value are return false will this whole function 
   // return false. 
   return (clippVal(redVal, inRed) || clippVal(greenVal, inGreen) || 
-         clippVal(blueVal, inBlue));
+          clippVal(blueVal, inBlue));
 }
 
 bool ColorClass::setTo(const ColorClass &inColor)
@@ -166,7 +269,154 @@ bool ColorClass::adjustBrightness(const double adjFactor)
   return setTo(redVal, greenVal, blueVal);
 }
 
-void ColorClass::printComponentValues()const
+void ColorClass::printComponentValues() const
 {
-  cout << "R: " << redVal << " G: " << greenVal << " B: " << blueVal << endl;
+  cout << "R: " << redVal << " G: " << greenVal << " B: " << blueVal;
+}
+
+RowColumnClass::RowColumnClass()
+{
+  rowVal = INIT_VAL;
+  colVal = INIT_VAL;
+}
+
+RowColumnClass::RowColumnClass(const int inRow, const int inCol)
+{
+  rowVal = inRow;
+  colVal = inCol;
+}
+
+void RowColumnClass::setRowCol(const int inRow, const int inCol)
+{
+  rowVal = inRow;
+  colVal = inCol;
+}
+
+void RowColumnClass::setRow(const int inRow)
+{
+  rowVal = inRow;
+}  
+
+void RowColumnClass::setCol(const int inCol)
+{
+  colVal = inCol;
+}
+
+int RowColumnClass::getRow() const
+{
+  return rowVal;
+}
+
+int RowColumnClass::getCol() const
+{
+  return colVal;
+}
+
+void RowColumnClass::addRowColTo(const RowColumnClass &inRowCol)
+{
+  rowVal += inRowCol.rowVal;
+  colVal += inRowCol.colVal;
+}
+
+void RowColumnClass::printRowCol() const
+{
+  cout << "[" << rowVal << ", " << colVal << "]";
+}
+
+ImageClass::ImageClass()
+{
+  for (int i = 0; i <  NUM_ROWS; i++)
+  {
+    for (int j = 0; j < NUM_COLS; j++)
+    {
+      imageAry[i][j].setToBlack();
+    }
+  }
+};
+
+void ImageClass::initializeTo(const ColorClass &inColor)
+{
+  for (int i = 0; i <  NUM_ROWS; i++)
+  {
+    for (int j = 0; j < NUM_COLS; j++)
+    {
+      imageAry[i][j].setTo(inColor);
+    }
+  }
+}
+
+bool ImageClass::addImageTo(const ImageClass &rhsImage)
+{
+  for (int i = 0; i <  NUM_ROWS; i++)
+  {
+    for (int j = 0; j < NUM_COLS; j++)
+    {
+      return imageAry[i][j].addColor(rhsImage.imageAry[i][j]);
+    }
+  }
+}
+
+bool ImageClass::addImages(const int numImgsToAdd, 
+  const ImageClass imagesToAdd [])
+{
+  for (int i = 0; i < numImgsToAdd; i++)
+  {
+    return addImageTo(imagesToAdd[i]);
+  }
+}
+
+bool ImageClass::setColorAtLocation(const RowColumnClass &inRowCol, 
+  const ColorClass &inColor)
+{
+  if (checkLoc(inRowCol))
+  {
+    imageAry[inRowCol.getRow()][inRowCol.getCol()].setTo(inColor);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool ImageClass::getColorAtLocation(const RowColumnClass &inRowCol, 
+  ColorClass &outColor) const
+{
+  if (checkLoc(inRowCol))
+  {
+    outColor.setTo(imageAry[inRowCol.getRow()][inRowCol.getCol()]);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+void ImageClass::printImage() const
+{
+  for (int i = 0; i <  NUM_ROWS; i++)
+  {
+    for (int j = 0; j < NUM_COLS; j++)
+    {
+      while (j != 0)
+      {
+        cout << "--";
+      }
+      imageAry[i][j].printComponentValues();     
+    }
+    cout << "\n";
+  }
+}
+
+bool ImageClass::checkLoc(const RowColumnClass &inRolCol) const
+{
+  if (inRolCol.getRow() > NUM_ROWS || inRolCol.getCol() > NUM_COLS)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
 }
