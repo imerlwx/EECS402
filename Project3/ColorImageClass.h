@@ -21,7 +21,8 @@ class ColorImageClass
     // false. Otherwise return true.
     bool imageEncoding(MessageFileClass encodeMes, int mesPlaceRow, 
       int mesPlaceCol);
-    // This function will decode the image to look for the information
+    // This function will decode the image to look for the information, if the
+    // image successfully decoded, return true; otherwise return false.
     bool imageDecoding();
     // This function will write the decoded image into an image file PPM
     bool writeImageOut(string outputFilename);

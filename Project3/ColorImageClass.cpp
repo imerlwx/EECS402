@@ -83,19 +83,32 @@ bool ColorImageClass::imageEncoding(MessageFileClass encodeMes,
   int encodeVal;
   int **encodeMatrix = encodeMes.getEncodeMatrix();
 
-  for (int encodeRowInd = max(mesPlaceRow, imageStartRow); encodeRowInd < 
+  for (int encodeRowInd = max(mesPlaceRow, IMAGE_START_ROW); encodeRowInd < 
        min(mesPlaceRow + mesRow, imgRowCol.getRow()); encodeRowInd++)
   {
-    for (int encodeColInd = max(mesPlaceCol, imageStartCol); encodeColInd <
+    for (int encodeColInd = max(mesPlaceCol, IMAGE_START_COL); encodeColInd <
          min(mesPlaceCol + mesCol, imgRowCol.getCol()); encodeColInd++)
     {
       encodeVal = encodeMatrix[encodeRowInd][encodeColInd];
-      twoDImage[encodeRowInd][encodeColInd].setTo(encodeVal);
+      twoDImage[encodeRowInd][encodeColInd].encodeVal(encodeVal);
     }
   }
 
   return true;
 }
+
+bool ColorImageClass::imageDecoding()
+{
+  for (int rInd = IMAGE_START_ROW; rInd < imgRowCol.getRow(); rInd++)
+  {
+    for (int cInd = IMAGE_START_COL; cInd < imgRowCol.getCol(); cInd++)
+    {
+      twoDImage[rInd][cInd].decodeVal();
+    }
+  }
+  return true;
+}
+
 
 bool ColorImageClass::writeImageOut(string outputFilename)
 {
@@ -107,19 +120,19 @@ bool ColorImageClass::writeImageOut(string outputFilename)
     return false;
   }
   
-  outFile << imageType << endl;
+  outFile << IMAGE_TYPE << endl;
   outFile << imgRowCol.getCol() << " " << imgRowCol.getRow() << endl;
   outFile << FULL_VAL << endl;
-  for (int rInd = imageStartRow; rInd < imgRowCol.getRow(); rInd++)
+  for (int rInd = IMAGE_START_ROW; rInd < imgRowCol.getRow(); rInd++)
   {
-    for (int cInd = imageStartCol; cInd < imgRowCol.getCol(); cInd++)
+    for (int cInd = IMAGE_START_COL; cInd < imgRowCol.getCol(); cInd++)
     {
       // output the red, green, blue value into the file in order
       outFile << twoDImage[rInd][cInd].getRedVal() << " " 
               << twoDImage[rInd][cInd].getGreenVal() << " "
               << twoDImage[rInd][cInd].getBlueVal() << " ";
       // after each row is output, change to a new line
-      if (cInd == imgRowCol.getCol() - zeroIndexShift)
+      if (cInd == imgRowCol.getCol() - ZERO_INDEX_SHIFT)
       {
         outFile << "\n";
       }

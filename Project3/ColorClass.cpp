@@ -3,10 +3,7 @@
 #include <iostream>
 using namespace std;
 
-ColorClass::ColorClass()
-{
-  setToWhite();
-}
+ColorClass::ColorClass(){}
 
 ColorClass::ColorClass(const int inRed, const int inGreen, const int inBlue)
 {
@@ -15,60 +12,100 @@ ColorClass::ColorClass(const int inRed, const int inGreen, const int inBlue)
   clippVal(blueVal, inBlue);
 }
 
-void ColorClass::setToBlack()
+void ColorClass::encToBlack()
 {
   setToEven(redVal);
   setToEven(greenVal);
   setToEven(blueVal);
 }
 
-void ColorClass::setToRed()
+void ColorClass::encToRed()
 {
   setToOdd(redVal);
   setToEven(greenVal);
   setToEven(blueVal);
 }
 
-void ColorClass::setToGreen()
+void ColorClass::encToGreen()
 {
   setToEven(redVal);
   setToOdd(greenVal);
   setToEven(blueVal);
 }
 
-void ColorClass::setToBlue()
+void ColorClass::encToBlue()
 {
   setToEven(redVal);
   setToEven(greenVal);
   setToOdd(blueVal);
 }
 
-void ColorClass::setToWhite()
+void ColorClass::encToWhite()
 {
   setToOdd(redVal);
   setToOdd(greenVal);
   setToOdd(blueVal);
 }
 
-void ColorClass::setToYellow()
+void ColorClass::encToYellow()
 {
   setToOdd(redVal);
   setToOdd(greenVal);
   setToEven(blueVal);
 }
 
-void ColorClass::setToMagenta()
+void ColorClass::encToMagenta()
 {
   setToOdd(redVal);
   setToEven(greenVal);
   setToOdd(blueVal);
 }
 
-void ColorClass::setToCyan()
+void ColorClass::encToCyan()
 {
   setToEven(redVal);
   setToOdd(greenVal);
   setToOdd(blueVal);
+}
+
+void ColorClass::decToBlack()
+{
+  setTo(FULL_VAL, FULL_VAL, FULL_VAL);
+}
+
+void ColorClass::decToRed()
+{
+  setTo(FULL_VAL, ZERO_VAL, ZERO_VAL);
+}
+
+void ColorClass::decToGreen()
+{
+  setTo(ZERO_VAL, FULL_VAL, ZERO_VAL);
+}
+
+void ColorClass::decToBlue()
+{
+  setTo(ZERO_VAL, ZERO_VAL, FULL_VAL);
+}
+
+void ColorClass::decToWhite()
+{
+  setTo(ZERO_VAL, ZERO_VAL, ZERO_VAL);
+}
+
+void ColorClass::decToYellow()
+{
+  setTo(FULL_VAL, FULL_VAL, ZERO_VAL);
+}
+
+void ColorClass::decToMagenta()
+{
+  setTo(FULL_VAL, ZERO_VAL, FULL_VAL);
+}
+
+void ColorClass::decToCyan()
+{
+  setTo(ZERO_VAL, FULL_VAL, FULL_VAL);
 }
 
 bool ColorClass::clippVal(int &colorVal1, const int colorVal2)
@@ -110,7 +147,7 @@ bool ColorClass::setTo(const ColorClass &inColor)
   return false; 
 }
 
-bool ColorClass::setTo(const int encodeVal)
+bool ColorClass::encodeVal(const int encodeVal)
 {
   if (encodeVal < 0 || encodeVal > 7)
   {
@@ -119,30 +156,68 @@ bool ColorClass::setTo(const int encodeVal)
   
   switch(encodeVal)
   {
-    case 0:
-      setToBlack();
-      break;
-    case 1:
-      setToRed();
-      break;
-    case 2:
-      setToGreen();
-      break;
-    case 3:
-      setToBlue();
-      break;
-    case 4:
-      setToWhite();
-      break;
-    case 5:
-      setToYellow();
-      break;
-    case 6:
-      setToMagenta();
-      break;
-    case 7:
-      setToCyan();
-      break;
+  case 0:
+    encToBlack();
+    break;
+  case 1:
+    encToRed();
+    break;
+  case 2:
+    encToGreen();
+    break;
+  case 3:
+    encToBlue();
+    break;
+  case 4:
+    encToWhite();
+    break;
+  case 5:
+    encToYellow();
+    break;
+  case 6:
+    encToMagenta();
+    break;
+  case 7:
+    encToCyan();
+    break;
+  }
+  
+  return true;
+}
+
+bool ColorClass::decodeVal()
+{
+  if (redVal % 2 == 0 && greenVal % 2 == 0 && blueVal % 2 == 0)
+  {
+    decToBlack();
+  }
+  else if (redVal % 2 != 0 && greenVal % 2 == 0 && blueVal % 2 == 0)
+  {
+    decToRed();
+  }
+  else if (redVal % 2 == 0 && greenVal % 2 != 0 && blueVal % 2 == 0)
+  {
+    decToGreen();
+  }
+  else if (redVal % 2 == 0 && greenVal % 2 == 0 && blueVal % 2 != 0)
+  {
+    decToBlue();
+  }
+  else if (redVal % 2 != 0 && greenVal % 2 != 0 && blueVal % 2 != 0)
+  {
+    decToWhite();
+  }
+  else if (redVal % 2 != 0 && greenVal % 2 != 0 && blueVal % 2 == 0)
+  {
+    decToYellow();
+  }
+  else if (redVal % 2 != 0 && greenVal % 2 == 0 && blueVal % 2 != 0)
+  {
+    decToMagenta();
+  }
+  else if (redVal % 2 == 0 && greenVal % 2 != 0 && blueVal % 2 != 0)
+  {
+    decToCyan();
   }
   return true;
 }
@@ -151,7 +226,7 @@ void ColorClass::setToEven(int rgbVal)
 {
   if (rgbVal % 2 != 0) // if it is not even, tweak it
   {
-    rgbVal -= rgbTreak;
+    rgbVal -= RGB_TWEAK;
   }
 }
 
@@ -159,7 +234,7 @@ void ColorClass::setToOdd(int rgbVal)
 {
   if (rgbVal % 2 == 0) // if it is not odd, tweak it
   {
-    rgbVal += rgbTreak;
+    rgbVal += RGB_TWEAK;
   }
 }
 

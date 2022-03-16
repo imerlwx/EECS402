@@ -23,22 +23,39 @@ class ColorClass
     // within the valid range. 
     ColorClass(const int inRed, const int inGreen, const int inBlue); 
 
-    // function sets the color’s initial RGB values to the color full black
-    void setToBlack(); 
-    // function sets the color’s initial RGB values to the color full red
-    void setToRed();
-    // function sets the color’s initial RGB values to the color full green
-    void setToGreen();
-    // function sets the color’s initial RGB values to the color full blue
-    void setToBlue();
-    // function sets the color’s initial RGB values to the color full white
-    void setToWhite();
-    // function sets the color’s initial RGB values to the color yellow
-    void setToYellow();
-    // function sets the color’s initial RGB values to the color magenta
-    void setToMagenta();
-    // function sets the color’s initial RGB values to the color cyan
-    void setToCyan();
+    // function encodes the color’s initial RGB values to the color black
+    void encToBlack(); 
+    // function encodes the color’s initial RGB values to the color red
+    void encToRed();
+    // function encodes the color’s initial RGB values to the color green
+    void encToGreen();
+    // function encodes the color’s initial RGB values to the color blue
+    void encToBlue();
+    // function encodes the color’s initial RGB values to the color white
+    void encToWhite();
+    // function encodes the color’s initial RGB values to the color yellow
+    void encToYellow();
+    // function encodes the color’s initial RGB values to the color magenta
+    void encToMagenta();
+    // function encodes the color’s initial RGB values to the color cyan
+    void encToCyan();
+    // function decodes the color’s initial RGB values to the color black
+    void decToBlack(); 
+    // function decodes the color’s initial RGB values to the color red
+    void decToRed();
+    // function decodes the color’s initial RGB values to the color green
+    void decToGreen();
+    // function decodes the color’s initial RGB values to the color blue
+    void decToBlue();
+    // function decodes the color’s initial RGB values to the color white
+    void decToWhite();
+    // function decodes the color’s initial RGB values to the color yellow
+    void decToYellow();
+    // function decodes the color’s initial RGB values to the color magenta
+    void decToMagenta();
+    // function decodes the color’s initial RGB values to the color cyan
+    void decToCyan();
+    
     // function sets one of the RGB value to even number
     void setToEven(int rgbVal); 
     // function sets one of the RGB value to odd number
@@ -53,10 +70,16 @@ class ColorClass
     // those in the "inColor" input parameter object. The function returns 
     // true if any clipping was necessary, otherwise it returns false. 
     bool setTo(const ColorClass &inColor);
-    // This function will set the color to what the encode number defines.
-    // There are 8 encodeVal from 0 ~ 7, and 8 colors in the order of : Black,
-    // Red, Green, Blue, White, Yellow, Magenta, Cyan
-    bool setTo(const int encodeVal);
+    
+    // This function will encode the color to what the encode number defines.
+    // There are 8 encodeVal from 0 ~ 7, and 8 colors in the order of: Black,
+    // Red, Green, Blue, White, Yellow, Magenta, Cyan. If encodeOrNot
+    // is true, encode the color; otherwise, decode the color.
+    bool encodeVal(const int encodeVal);
+    // This function will decode the color due to its RGB value. Depending on
+    // each value is even or odd, the pixel will be decoded to one of the 8
+    // colors (Black, Red, Green, Blue, White, Yellow, Magenta, Cyan).
+    bool decodeVal();
     
     // This function causes each RGB value to have the corresponding value 
     // from the input parameter color added to it.
