@@ -149,7 +149,7 @@ bool ColorClass::setTo(const ColorClass &inColor)
 
 bool ColorClass::encodeVal(const int encodeVal)
 {
-  if (encodeVal < 0 || encodeVal > 7)
+  if (encodeVal < MIN_ENCODE_NUM || encodeVal > MAX_ENCODE_NUM)
   {
     return false;
   }
