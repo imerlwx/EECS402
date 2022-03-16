@@ -188,6 +188,21 @@ bool ColorClass::adjustBrightness(const double adjFactor)
   return setTo(redVal, greenVal, blueVal);
 }
 
+int ColorClass::getRedVal()const
+{
+  return redVal;
+}
+
+int ColorClass::getGreenVal()const
+{
+  return greenVal;
+}
+
+int ColorClass::getBlueVal()const
+{
+  return blueVal;
+}
+
 void ColorClass::printComponentValues() const
 {
   cout << "R: " << redVal << " G: " << greenVal << " B: " << blueVal;

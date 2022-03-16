@@ -1,5 +1,6 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
+#include <string>
 // This file will define all the global constants used in the main
 const int ARGC_NUM = 2; // the number of arguments the user needs to input
 const int FULL_VAL = 255; // the largest amount in a color
@@ -11,5 +12,8 @@ const int CHOICE_ONE = 1;
 const int CHOICE_TWO = 2;
 const int CHOICE_THREE = 3;
 const int CHOICE_FOUR = 4;
+const int imageStartRow = 0;
+const int imageStartCol = 0;
+const string imageType = "P3";
 
 #endif

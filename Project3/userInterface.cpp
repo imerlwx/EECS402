@@ -6,7 +6,7 @@
 #include <iostream>
 using namespace std;
 
-void userInterface(ColorImageClass ppmImage)
+void userInterface(ColorImageClass &ppmImage)
 {
   cout << CHOICE_ONE << ". Encode a message from file" << "\n"
        << CHOICE_TWO << ". Perform decode" << "\n"
@@ -22,11 +22,9 @@ void userInterface(ColorImageClass ppmImage)
     cout << "Enter name of file containing message:";
     string mesFilename;
     cin >> mesFilename;
-    cout << mesFilename << endl;
     cout << "Enter row and column for message placement: ";
     int mesPlaceRow, mesPlaceCol;
     cin >> mesPlaceRow >> mesPlaceCol;
-    cout << mesPlaceRow << " " << mesPlaceCol << endl;
 
     MessageFileClass encodeMes;
     bool validMesFound = encodeMes.messageRead(mesFilename);
@@ -38,7 +36,7 @@ void userInterface(ColorImageClass ppmImage)
     }
     else
     {
-      ppmImage.imageEncoding(mesFilename, mesPlaceRow, mesPlaceCol);
+      ppmImage.imageEncoding(encodeMes, mesPlaceRow, mesPlaceCol);
       cout << "Message encode successful: Yes" << endl;
       userInterface(ppmImage);
     }
@@ -47,11 +45,25 @@ void userInterface(ColorImageClass ppmImage)
   else if (userChoice == CHOICE_TWO)
   {
     ppmImage.imageDecoding();
+    cout << "Image modified to decoded image contents" << endl;
+    userInterface(ppmImage);
   }
   
   else if (userChoice == CHOICE_THREE)
   {
-    ppmImage.writeImageOut();
+    cout << "Enter name of file to write image to: " << endl;
+    string outputFilename;
+    cin >> outputFilename;
+    bool validOutput = ppmImage.writeImageOut(outputFilename);
+    if (validOutput)
+    {
+      cout << "Image write successful: Yes" << endl;
+    }
+    else
+    {
+      cout << "Image write successful: No" << endl;
+    }
+    userInterface(ppmImage);
   }
   
   else if (userChoice == CHOICE_FOUR)

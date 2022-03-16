@@ -22,20 +22,30 @@ bool MessageFileClass::messageRead(string mesFilename)
   mesRowCol.setRowCol(numRows, numCols);
   int encodeVal;
 
-  for (int i = 0; i < numCols * numRows; i++)
+  for (int rInd = 0; rInd < numRows; rInd++)
   {
-    mesFile >> encodeVal;
-
-    if (mesFile.fail() || mesFile.eof())
+    for (int cInd = 0; cInd < numCols; cInd++)
     {
-      int errorRowInd = (i + zeroIndexShift) / numCols;
-      int errorColInd = (i + zeroIndexShift) - errorRowInd * numCols;
-      cout << "Error: Reading message value at row/Col: " << errorRowInd
-           << errorColInd << endl;
-      return false;
-    }
+      mesFile >> encodeVal;
 
-    oneDArrFor2DMes[i] = encodeVal;
+      if (mesFile.fail() || mesFile.eof())
+      {
+        cout << "Error: Reading message value at row/Col: " << rInd
+            << cInd << endl;
+        return false;
+      }
+      twoDMessage[rInd][cInd] = encodeVal;
+    }
   }
   return true;
+}
+
+int MessageFileClass::getMesSize()
+{
+  return mesRowCol.getRow(), mesRowCol.getCol();
+}
+
+int **MessageFileClass::getEncodeMatrix()
+{
+  return twoDMessage;
 }

@@ -70,7 +70,13 @@ class ColorClass
     // less than 1, the color gets dimmer. the RGB values will still be in 
     // the allowed color value range.
     bool adjustBrightness(const double adjFactor);
-
+    
+    // This function will return the redVal
+    int getRedVal()const;
+    // This function will return the greenVal
+    int getGreenVal()const;
+    // This function will return the blueVal
+    int getBlueVal()const;
     // Prints the component color values to the console using the following 
     // format: "R: <red> G: <green> B: <blue>" where <red>, <green>, <blue>
     // are all replaced with their corresponding component color values.
